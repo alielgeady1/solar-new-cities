@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Solar for New Cities</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+/* Layout: one calm column; a sun-ring hero with three irradiance figures, then problem (3 barriers) -> solution (4 real steps + 2 policy actions) -> team. */
+:root {
+  --bg: #F2F6F8;
+  --surface: #FFFFFF;
+  --fg: #0F2B3A;
+  --muted: #4F6672;
+  --line: #D3DEE4;
+  --sun: #F2A900;
+  --sun-ink: #7A5200;
+  --teal: #0A7C78;
+  --teal-soft: #DCEFEE;
+  --alert: #B4432B;
+  --alert-soft: #F6E3DD;
+  --font-display: "Bricolage Grotesque", "IBM Plex Sans Arabic", system-ui, sans-serif;
+  --font-body: "IBM Plex Sans Arabic", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-data: "IBM Plex Mono", ui-monospace, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0A1820; --surface: #112430; --fg: #E6EFF3; --muted: #9DB3BE; --line: #23404F;
+    --sun: #F5B62A; --sun-ink: #F5C75C; --teal: #4FC7C0; --teal-soft: #123A3C;
+    --alert: #F0937C; --alert-soft: #3A2019; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0A1820; --surface: #112430; --fg: #E6EFF3; --muted: #9DB3BE; --line: #23404F;
+  --sun: #F5B62A; --sun-ink: #F5C75C; --teal: #4FC7C0; --teal-soft: #123A3C;
+  --alert: #F0937C; --alert-soft: #3A2019; color-scheme: dark;
+}
+
+:root { box-sizing: border-box; padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); }
+html { scroll-padding-top: env(safe-area-inset-top, 0px); }
+* { box-sizing: border-box; }
+body {
+  background: var(--bg); color: var(--fg);
+  font-family: var(--font-body); font-size: 16px; line-height: 1.65;
+  padding-block: 0 48px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+.wrap { max-width: 960px; margin-inline: auto; }
+
+/* language switching */
+.ar { display: none; }
+:root[data-lang="ar"] .en { display: none; }
+:root[data-lang="ar"] .ar { display: revert; }
+:root[data-lang="ar"] .btn-lang .ar { display: inline; }
+
+h1, h2, h3 { font-family: var(--font-display); text-wrap: balance; line-height: 1.15; margin: 0; }
+p { margin: 0; max-width: 65ch; }
+a { color: var(--teal); text-underline-offset: 3px; }
+a:focus-visible, button:focus-visible { outline: 3px solid var(--sun); outline-offset: 3px; border-radius: 4px; }
+
+/* top bar */
+.bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-block: 16px; flex-wrap: wrap; }
+.tag { font-family: var(--font-data); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.btn-lang {
+  font: 600 14px var(--font-body); color: var(--fg); background: var(--surface);
+  border: 1.5px solid var(--line); border-radius: 999px; padding: 8px 16px; cursor: pointer;
+}
+.btn-lang:hover { border-color: var(--teal); }
+
+/* hero */
+.hero { display: grid; grid-template-columns: 1fr auto; gap: 24px 40px; align-items: center; padding-block: 32px 40px; }
+.hero h1 { font-size: clamp(2.2rem, 7vw, 4rem); font-weight: 800; letter-spacing: -.02em; }
+.hero h1 em { font-style: normal; color: var(--sun-ink); }
+.hero .lede { margin-top: 16px; color: var(--muted); font-size: 1.08rem; }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 20px; }
+.chip { font: 600 13px var(--font-body); padding: 6px 12px; border-radius: 6px; background: var(--teal-soft); color: var(--teal); }
+.chip.sun { background: color-mix(in srgb, var(--sun) 22%, transparent); color: var(--sun-ink); }
+.sunmark { width: clamp(120px, 22vw, 200px); height: auto; }
+.sunmark .core { fill: var(--sun); }
+.sunmark .rays { stroke: var(--sun); fill: none; }
+.sunmark .ring { stroke: var(--line); fill: none; }
+
+.stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; border-block: 1.5px solid var(--fg); }
+.stat { padding: 20px 16px; min-width: 0; }
+.stat + .stat { border-inline-start: 1px solid var(--line); }
+.stat b { display: block; font: 700 clamp(1.3rem, 4.4vw, 2.1rem)/1.1 var(--font-data); font-variant-numeric: tabular-nums; }
+.stat span { display: block; margin-top: 6px; font-size: .88rem; color: var(--muted); }
+
+/* sections */
+section { padding-top: 56px; }
+.kicker { font-family: var(--font-data); font-size: 12px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; display: block; }
+:root[data-lang="ar"] .kicker { letter-spacing: 0; }
+h2 { font-size: clamp(1.7rem, 4.5vw, 2.4rem); font-weight: 700; }
+.intro { margin-top: 14px; color: var(--muted); }
+
+.problem-box { margin-top: 24px; background: var(--alert-soft); border-radius: 10px; padding: 22px 24px; }
+.problem-box p { max-width: 70ch; font-size: 1.05rem; }
+
+.barriers { margin-top: 20px; display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; }
+.barrier { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 20px; min-width: 0; }
+.barrier h3 { font-size: 1.15rem; margin-bottom: 8px; }
+.barrier .axis { font: 500 12px var(--font-data); color: var(--alert); letter-spacing: .06em; text-transform: uppercase; display: block; margin-bottom: 8px; }
+:root[data-lang="ar"] .barrier .axis { letter-spacing: 0; }
+.barrier p { font-size: .96rem; color: var(--muted); }
+
+/* solution steps: a real sequence */
+.steps { list-style: none; margin: 24px 0 0; padding: 0; display: grid; gap: 0; counter-reset: s; }
+.step { display: grid; grid-template-columns: 44px 1fr; gap: 16px; padding-block: 18px; border-top: 1px solid var(--line); }
+.step:last-child { border-bottom: 1px solid var(--line); }
+.step::before {
+  counter-increment: s; content: counter(s);
+  width: 44px; height: 44px; border-radius: 50%; background: var(--sun); color: #2A1B00;
+  display: grid; place-items: center; font: 700 1.1rem var(--font-data);
+}
+.step h3 { font-size: 1.1rem; margin-bottom: 4px; }
+.step p { color: var(--muted); font-size: .96rem; }
+
+.deliver { margin-top: 28px; display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
+.link {
+  display: flex; flex-direction: column; gap: 4px; padding: 16px 18px; text-decoration: none;
+  background: var(--surface); border: 1.5px solid var(--line); border-radius: 10px; color: var(--fg); min-width: 0;
+}
+.link:hover { border-color: var(--teal); }
+.link strong { font-family: var(--font-display); font-size: 1.05rem; }
+.link small { color: var(--teal); font: 500 12px var(--font-data); overflow-wrap: anywhere; direction: ltr; text-align: start; }
+
+.actions { margin-top: 36px; display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+.action { background: var(--teal-soft); border-radius: 10px; padding: 22px; min-width: 0; }
+.action .n { font: 500 12px var(--font-data); letter-spacing: .08em; text-transform: uppercase; color: var(--teal); }
+:root[data-lang="ar"] .action .n { letter-spacing: 0; }
+.action h3 { font-size: 1.2rem; margin: 6px 0 10px; }
+.action ul { margin: 0; padding-inline-start: 20px; display: grid; gap: 6px; font-size: .96rem; }
+
+.hash { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 28px; direction: ltr; }
+.hash span { font: 500 13px var(--font-data); padding: 5px 10px; border: 1px solid var(--line); border-radius: 6px; color: var(--muted); }
+
+.cta { display: inline-block; margin-top: 22px; padding: 12px 22px; border-radius: 8px; background: var(--sun); color: #2A1B00; font: 700 1rem var(--font-body); text-decoration: none; }
+.cta:hover { filter: brightness(1.06); }
+.survey { margin-top: 24px; display: grid; grid-template-columns: 1.3fr 1fr; gap: 0; background: var(--surface); border: 1.5px solid var(--fg); border-radius: 12px; overflow: hidden; }
+.survey > div { padding: 26px; min-width: 0; }
+.survey .side { background: var(--teal-soft); display: grid; align-content: center; gap: 14px; }
+.survey h3 { font-size: 1.35rem; margin-bottom: 10px; }
+.survey p { color: var(--muted); font-size: .96rem; }
+.facts { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; font-size: .95rem; }
+.facts li { display: flex; justify-content: space-between; gap: 16px; border-bottom: 1px solid var(--line); padding-bottom: 8px; }
+.facts li span:last-child { font-weight: 600; text-align: end; }
+.survey .cta { margin-top: 0; text-align: center; }
+@media (max-width: 640px) { .survey { grid-template-columns: 1fr; } }
+
+/* team */
+.tablewrap { margin-top: 24px; overflow-x: auto; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); }
+table { width: 100%; border-collapse: collapse; min-width: 360px; }
+th, td { text-align: start; padding: 14px 18px; border-bottom: 1px solid var(--line); }
+th { font: 500 12px var(--font-data); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+:root[data-lang="ar"] th { letter-spacing: 0; }
+tr:last-child td { border-bottom: 0; }
+td:first-child { font-weight: 600; }
+
+.refs { margin-top: 20px; padding-inline-start: 22px; display: grid; gap: 10px; color: var(--muted); font-size: .92rem; direction: ltr; text-align: start; }
+footer { margin-top: 56px; padding-top: 20px; border-top: 1px solid var(--line); color: var(--muted); font-size: .88rem; }
+
+@media (max-width: 560px) {
+  .hero { grid-template-columns: 1fr; }
+  .sunmark { order: -1; width: 110px; }
+  .stat { padding: 16px 10px; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .sunmark .rays { transform-origin: 100px 100px; animation: turn 80s linear infinite; }
+  @keyframes turn { to { transform: rotate(360deg); } }
+}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <div class="bar">
+    <span class="tag"><span class="en">AIU Alamein · Sustainability &amp; SDGs · Group 277</span><span class="ar">جامعة العلمين الدولية · الاستدامة وأهداف التنمية · مجموعة 277</span></span>
+    <button class="btn-lang" id="lang" type="button" aria-label="Switch language / تبديل اللغة"><span class="en">العربية</span><span class="ar">English</span></button>
+  </div>
+
+  <header class="hero">
+    <div>
+      <h1>
+        <span class="en">Solar power for Egypt's <em>new cities</em></span>
+        <span class="ar">الطاقة الشمسية لـ<em>مدن مصر الجديدة</em></span>
+      </h1>
+      <p class="lede">
+        <span class="en">New cities are growing fast and still lean on a fossil-fuel grid. Sunlight is plentiful. What is missing is affordable financing, grid readiness and public awareness.</span>
+        <span class="ar">تنمو المدن الجديدة بسرعة وما زالت تعتمد على شبكة كهرباء قائمة على الوقود الأحفوري. الشمس وفيرة، لكن ينقص التمويل الميسّر وجاهزية الشبكة والوعي المجتمعي.</span>
+      </p>
+      <div class="chips">
+        <span class="chip sun"><span class="en">SDG 7 · Affordable &amp; clean energy</span><span class="ar">الهدف 7 · طاقة نظيفة وبأسعار معقولة</span></span>
+        <span class="chip"><span class="en">SDG 11 · Sustainable cities</span><span class="ar">الهدف 11 · مدن ومجتمعات مستدامة</span></span>
+      </div>
+      <a class="cta" href="#survey"><span class="en">Take the survey</span><span class="ar">شارك في الاستبيان</span></a>
+    </div>
+    <svg class="sunmark" viewBox="0 0 200 200" role="img" aria-label="Sun">
+      <circle class="ring" cx="100" cy="100" r="92" stroke-width="1.5"/>
+      <circle class="rays" cx="100" cy="100" r="72" stroke-width="16" stroke-dasharray="3 14.1"/>
+      <circle class="core" cx="100" cy="100" r="46"/>
+    </svg>
+  </header>
+
+  <div class="stats">
+    <div class="stat"><b>2,000–3,200</b><span><span class="en">kWh/m² of direct sun per year</span><span class="ar">كيلوواط ساعة/م² إشعاع شمسي مباشر سنوياً</span></span></div>
+    <div class="stat"><b>3,000+</b><span><span class="en">sunshine hours per year</span><span class="ar">ساعة سطوع شمسي سنوياً</span></span></div>
+    <div class="stat"><b>42%+</b><span><span class="en">renewable share of electricity targeted by 2035</span><span class="ar">مستهدف مساهمة المتجددة من الكهرباء بحلول 2035</span></span></div>
+  </div>
+
+  <section id="problem">
+    <span class="kicker"><span class="en">The problem</span><span class="ar">المشكلة</span></span>
+    <h2><span class="en">Demand is rising faster than clean supply</span><span class="ar">الطلب يزداد أسرع من المعروض النظيف</span></h2>
+    <div class="problem-box">
+      <p class="en">Egypt's new urban communities are expanding quickly in both buildings and population. That puts heavy pressure on a traditional grid that relies on fossil fuel, raising carbon emissions and pollution. Solar energy is the main sustainable answer and is abundant, but scaling it up runs into low public awareness, high upfront cost, and the difficulty of connecting systems to the national grid.</p>
+      <p class="ar">تشهد المدن والمجتمعات العمرانية الجديدة في مصر نمواً متسارعاً عمرانياً وسكانياً، مما يفرض ضغطاً كبيراً على شبكات الكهرباء التقليدية المعتمدة على الوقود الأحفوري ويؤدي إلى زيادة الانبعاثات الكربونية والتلوث البيئي. ورغم أن الطاقة الشمسية حل رئيسي ومستدام ومتوفر بكثرة، فإن التوسع في تطبيقها يواجه تحديات تتعلق بضعف الوعي المجتمعي وارتفاع التكلفة الأولية وآليات الربط بالشبكة الكهربائية القومية.</p>
+    </div>
+
+    <div class="barriers">
+      <article class="barrier">
+        <span class="axis"><span class="en">Economic &amp; financial</span><span class="ar">اقتصادي ومالي</span></span>
+        <h3><span class="en">High upfront cost</span><span class="ar">ارتفاع التكلفة الأولية</span></h3>
+        <p class="en">Panels, inverters and batteries need large capital. Costs are falling worldwide, yet payback periods stay long without flexible financing.</p>
+        <p class="ar">تتطلب الخلايا والمحولات والبطاريات رأس مال كبيراً. ورغم انخفاض التكاليف عالمياً تظل فترات الاسترداد طويلة دون تمويل مرن.</p>
+      </article>
+      <article class="barrier">
+        <span class="axis"><span class="en">Technical &amp; infrastructure</span><span class="ar">فني وبنية تحتية</span></span>
+        <h3><span class="en">Grid and climate limits</span><span class="ar">قيود الشبكة والمناخ</span></h3>
+        <p class="en">Decentralized solar needs a smart grid that can balance day and night output. Summer heat lowers cell efficiency, and dust and sandstorms call for cooling and regular cleaning.</p>
+        <p class="ar">تحتاج الشمسية اللامركزية إلى شبكة ذكية توازن بين إنتاج النهار والليل. ودرجات الحرارة المرتفعة تقلل كفاءة الخلايا، والغبار والعواصف الرملية يتطلبان تبريداً وصيانة دورية.</p>
+      </article>
+      <article class="barrier">
+        <span class="axis"><span class="en">Institutional &amp; community</span><span class="ar">مؤسسي ومجتمعي</span></span>
+        <h3><span class="en">Low awareness, heavy paperwork</span><span class="ar">ضعف الوعي وتعقيد الإجراءات</span></h3>
+        <p class="en">Opinion surveys show a gap in environmental and technical awareness, and a low share of residents who use clean energy. Net-metering procedures and grid-connection rules are complicated.</p>
+        <p class="ar">تشير مسوح الرأي إلى فجوة في الوعي البيئي والتقني وقلة من يستعينون بالطاقة النظيفة، كما أن إجراءات القياس الصافي والربط بالشبكة معقدة.</p>
+      </article>
+    </div>
+  </section>
+
+  <section id="solution">
+    <span class="kicker"><span class="en">The solution</span><span class="ar">الحل</span></span>
+    <h2><span class="en">Measure awareness, then spread the case for solar</span><span class="ar">قياس الوعي ثم نشر مزايا الطاقة الشمسية</span></h2>
+    <p class="intro en">Our group built and ran a digital awareness campaign: an online survey plus an infographic poster, shared on LinkedIn. It turns the awareness gap into data and the data into a clear public message.</p>
+    <p class="intro ar">نفّذت المجموعة حملة توعية رقمية تتكون من استبيان إلكتروني وملصق إنفوجرافيك، ونُشرت عبر لينكدإن. تحوّل الحملة فجوة الوعي إلى بيانات، والبيانات إلى رسالة واضحة للجمهور.</p>
+
+    <ol class="steps">
+      <li class="step"><div>
+        <h3><span class="en">Design the e-survey</span><span class="ar">تصميم الاستبيان الإلكتروني</span></h3>
+        <p class="en">A Google Forms survey measures how well residents and property owners in new cities understand the economic and environmental value of solar, and which barriers stop them, such as upfront cost and missing technical information.</p>
+        <p class="ar">استبيان عبر Google Forms يقيس مستوى وعي السكان وأصحاب العقارات في المدن الجديدة بالجدوى الاقتصادية والبيئية للطاقة الشمسية، ويستكشف العوائق مثل التكلفة الأولية ونقص المعلومات التقنية.</p>
+      </div></li>
+      <li class="step"><div>
+        <h3><span class="en">Collect and analyze data</span><span class="ar">جمع وتحليل البيانات</span></h3>
+        <p class="en">The survey went to a sample of residents and people interested in sustainable urbanism. Responses were compiled, grouped and analyzed to pull out the main findings on attitudes toward clean energy.</p>
+        <p class="ar">وُزّع الاستبيان على عينة من السكان والمهتمين بالاستدامة العمرانية، ثم جُمعت الإجابات وبُوّبت وحُللت لاستخلاص أهم النتائج حول انطباعات المجتمع وتطلعاته نحو الطاقة النظيفة.</p>
+      </div></li>
+      <li class="step"><div>
+        <h3><span class="en">Produce the awareness infographic</span><span class="ar">إعداد الإنفوجرافيك التوعوي</span></h3>
+        <p class="en">Based on the results, the group designed a simple visual poster that shows the expected environmental and financial savings of installing solar cells, the support mechanisms and the funding available.</p>
+        <p class="ar">بناءً على النتائج صممت المجموعة إنفوجرافيك مبسطاً يوضح بصرياً الوفر المالي والبيئي المتوقع عند تركيب الخلايا الشمسية، وأهم آليات الدعم والتمويل المتاحة.</p>
+      </div></li>
+      <li class="step"><div>
+        <h3><span class="en">Publish on LinkedIn</span><span class="ar">النشر الرقمي على لينكدإن</span></h3>
+        <p class="en">The survey link and the infographic were posted together with approved hashtags so the message reaches as many people and specialists as possible.</p>
+        <p class="ar">نُشر رابط الاستبيان مع الإنفوجرافيك مع إرفاق الهاشتاجات المعتمدة لضمان وصول الرسالة التوعوية لأكبر عدد من الجمهور والمختصين.</p>
+      </div></li>
+    </ol>
+
+    <div class="deliver">
+      <a class="link" href="https://docs.google.com/forms/d/e/1FAIpQLScaqLi0cmH8qRfeC0fm8NcoIyfkPMWj-LLEdT5l4gztnh8V1Q/viewform" target="_blank" rel="noopener">
+        <strong><span class="en">Awareness survey</span><span class="ar">استبيان الوعي</span></strong>
+        <small><span class="en">Takes 3–4 minutes · anonymous</span><span class="ar">3–4 دقائق · البيانات مجهولة</span></small>
+      </a>
+      <a class="link" href="https://lnkd.in/p/eM6HTy46" target="_blank" rel="noopener">
+        <strong><span class="en">LinkedIn post</span><span class="ar">منشور لينكدإن</span></strong>
+        <small>lnkd.in/p/eM6HTy46</small>
+      </a>
+    </div>
+
+    <div class="actions">
+      <article class="action">
+        <span class="n"><span class="en">Action 1</span><span class="ar">الإجراء 1</span></span>
+        <h3><span class="en">Financial and technical policy frameworks</span><span class="ar">أطر السياسات المالية والفنية</span></h3>
+        <ul>
+          <li><span class="en">Green bonds and low-interest loans for solar components</span><span class="ar">سندات خضراء وقروض ميسرة بفائدة منخفضة لشراء المكونات</span></li>
+          <li><span class="en">Smart grids that manage daytime surplus</span><span class="ar">شبكات ذكية لإدارة فائض النهار</span></li>
+          <li><span class="en">Mandatory solar and green building codes for new cities</span><span class="ar">دمج كودات الطاقة الشمسية والمعايير الخضراء إلزامياً في المدن الجديدة</span></li>
+          <li><span class="en">Tax and customs incentives for emerging companies</span><span class="ar">حوافز ضريبية وجمركية للشركات الناشئة</span></li>
+        </ul>
+      </article>
+      <article class="action">
+        <span class="n"><span class="en">Action 2</span><span class="ar">الإجراء 2</span></span>
+        <h3><span class="en">Community awareness and digital engagement</span><span class="ar">التوعية المجتمعية والتفاعل الرقمي</span></h3>
+        <ul>
+          <li><span class="en">Targeted educational campaigns</span><span class="ar">حملات توعية تعليمية موجهة</span></li>
+          <li><span class="en">Digital tools that show long-term financial savings</span><span class="ar">أدوات رقمية توضح الوفر المالي طويل الأجل</span></li>
+          <li><span class="en">Support for local research and manufacturing of solar technology</span><span class="ar">دعم البحث العلمي والتطوير التكنولوجي المحلي لإنتاج وتجميع التقنيات الشمسية</span></li>
+        </ul>
+      </article>
+    </div>
+
+    <p class="intro en" style="margin-top:28px">Egypt already shows what works at scale: the Benban Solar Park in Aswan, one of the world's largest solar complexes, and rooftop panels on new buildings in New Alamein and the New Administrative Capital.</p>
+    <p class="intro ar" style="margin-top:28px">تقدم مصر نماذج ناجحة على نطاق واسع، منها مجمع بنبان للطاقة الشمسية بأسوان وهو من أكبر المجمعات الشمسية في العالم، وخلايا الأسطح على المباني الجديدة في العلمين الجديدة والعاصمة الإدارية الجديدة.</p>
+
+    <div class="hash" aria-label="Hashtags">
+      <span>#AIU</span><span>#Climate_change_Sustainability</span><span>#SDGs</span><span>#GEO217</span><span>#Alamein_International_University</span>
+    </div>
+  </section>
+
+  <section id="survey">
+    <span class="kicker"><span class="en">The survey</span><span class="ar">الاستبيان</span></span>
+    <h2><span class="en">Tell us what you think about solar</span><span class="ar">شاركنا رأيك في الطاقة الشمسية</span></h2>
+    <div class="survey">
+      <div>
+        <h3><span class="en">Solar Energy in Egypt's New Cities</span><span class="ar">الطاقة الشمسية في مدن مصر الجديدة</span></h3>
+        <p class="en">Part of the GEO217 Sustainability Project at Alamein International University. It starts with your age, major and where you live, then asks what you know about solar energy and what holds people back. Your answers feed the research on SDG 7 and SDG 11 and the infographic we publish.</p>
+        <p class="ar">جزء من مشروع الاستدامة لمقرر GEO217 بجامعة العلمين الدولية. يبدأ بالعمر والتخصص ومحل السكن، ثم يسأل عما تعرفه عن الطاقة الشمسية وما الذي يعوق الناس عن استخدامها. تدعم إجاباتك البحث حول الهدفين 7 و11 والإنفوجرافيك الذي ننشره.</p>
+      </div>
+      <div class="side">
+        <ul class="facts">
+          <li><span class="en">Time</span><span class="ar">المدة</span><span class="en">3–4 minutes</span><span class="ar">3–4 دقائق</span></li>
+          <li><span class="en">Pages</span><span class="ar">الصفحات</span><span>7</span></li>
+          <li><span class="en">Privacy</span><span class="ar">الخصوصية</span><span class="en">Anonymous</span><span class="ar">بيانات مجهولة</span></li>
+          <li><span class="en">Supervisor</span><span class="ar">إشراف</span><span class="en">Dr. Sameh Nakhla</span><span class="ar">د. سامح نخلة</span></li>
+        </ul>
+        <a class="cta" href="https://docs.google.com/forms/d/e/1FAIpQLScaqLi0cmH8qRfeC0fm8NcoIyfkPMWj-LLEdT5l4gztnh8V1Q/viewform" target="_blank" rel="noopener"><span class="en">Open the survey</span><span class="ar">افتح الاستبيان</span></a>
+      </div>
+    </div>
+  </section>
+
+  <section id="team">
+    <span class="kicker"><span class="en">The team</span><span class="ar">الفريق</span></span>
+    <h2><span class="en">Who did what</span><span class="ar">مهام كل طالب</span></h2>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th><span class="en">Student</span><span class="ar">الطالب</span></th><th><span class="en">Task</span><span class="ar">المهمة</span></th></tr></thead>
+        <tbody>
+          <tr><td><span class="en">Abobakr Mohamed Mohamed</span><span class="ar">أبوبكر محمد أحمد علي</span></td><td><span class="en">Research and analysis</span><span class="ar">البحث والتحليل</span></td></tr>
+          <tr><td><span class="en">Abdelfatah Ahmed</span><span class="ar">عبدالفتاح أحمد عبدالحكيم</span></td><td><span class="en">Content development</span><span class="ar">تطوير المحتوى</span></td></tr>
+          <tr><td><span class="en">Menallah Ahmed</span><span class="ar">منة الله أحمد فتحي جبريل</span></td><td><span class="en">Deploying AI tools</span><span class="ar">توظيف أدوات الذكاء الاصطناعي</span></td></tr>
+          <tr><td><span class="en">Ahmed Mohamed Mahmoud</span><span class="ar">أحمد محمد محمود</span></td><td><span class="en">Digital publishing</span><span class="ar">النشر الرقمي</span></td></tr>
+          <tr><td><span class="en">Hussein Hazem Elnahas</span><span class="ar">حسين حازم النحاس</span></td><td><span class="en">Final output</span><span class="ar">المخرج النهائي</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="sources">
+    <span class="kicker"><span class="en">Selected references</span><span class="ar">مراجع مختارة</span></span>
+    <h2><span class="en">Where the facts come from</span><span class="ar">مصادر المعلومات</span></h2>
+    <ol class="refs">
+      <li>Brundtland, G. H. (1987). Our Common Future: Report of the World Commission on Environment and Development. Oxford University Press.</li>
+      <li>El-Khayat, A., Hassan, M., &amp; Soliman, R. (2021). Renewable energy transition in Egypt. Energy Policy Review, 34(4), 210–225.</li>
+      <li>IPCC. (2021). Climate Change 2021: The Physical Science Basis. Cambridge University Press.</li>
+      <li>Kamel, S., Abdel-Moneim, A., &amp; Farag, M. (2020). Solar PV efficiency and grid integration in arid climates: Benban Solar Park case study. Renewable and Sustainable Energy Journal, 48, 102–118.</li>
+      <li>United Nations. (2015). Transforming Our World: The 2030 Agenda for Sustainable Development. UN Publishing.</li>
+    </ol>
+  </section>
+
+  <footer>
+    <span class="en">Sustainability and SDGs project, Fall 2026 · Alamein International University</span>
+    <span class="ar">مشروع الاستدامة والتنمية المستدامة، خريف 2026 · جامعة العلمين الدولية</span>
+  </footer>
+</div>
+
+<script>
+(function () {
+  var root = document.documentElement;
+  function apply(lang) {
+    root.setAttribute('data-lang', lang);
+    root.setAttribute('lang', lang);
+    root.setAttribute('dir', lang === 'ar' ? 'rtl' : 'ltr');
+  }
+  var saved = null;
+  try { saved = localStorage.getItem('lang'); } catch (e) {}
+  apply(saved === 'ar' ? 'ar' : 'en');
+  document.getElementById('lang').addEventListener('click', function () {
+    var next = root.getAttribute('data-lang') === 'ar' ? 'en' : 'ar';
+    apply(next);
+    try { localStorage.setItem('lang', next); } catch (e) {}
+  });
+})();
+</script>
+</body>
+</html>
